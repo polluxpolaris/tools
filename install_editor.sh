@@ -44,19 +44,26 @@ rm -rf "${OLD_PATHS[@]}"
 # 2. System dependencies
 # ---------------------------------------------------------------------------
 echo "--- Installing system dependencies ---"
-sudo apt-get update
-sudo apt-get install -y \
+#sudo apt-get update
+sudo pacman -Sy
+
+#sudo apt-get install -y \
+#    fd-find \
+#    build-essential \
+#    libtool-bin \
+#    libvterm-dev
+sudo pacman -S -y \
     git \
     curl \
     emacs \
     ripgrep \
-    fd-find \
-    build-essential \
+    fd \
+    base-devel \
     cmake \
     libtool \
-    libtool-bin \
     pkg-config \
-    libvterm-dev
+    libvterm \
+
 
 # Doom expects `fd`, Debian/Ubuntu ships it as `fdfind`
 if ! command -v fd >/dev/null 2>&1 && command -v fdfind >/dev/null 2>&1; then
