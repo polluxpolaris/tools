@@ -1,5 +1,5 @@
-#!/bin/bash
 # Wipes any existing Emacs/Doom config and installs a fresh Doom Emacs
+#!/bin/bash
 # setup, then symlinks in the checked-in config from doom/ (init.el,
 # config.el, packages.el — lsp, rust+tree-sitter, vterm, python,
 # claude-code-ide, format-on-save).
@@ -48,19 +48,33 @@ rm -rf "${OLD_PATHS[@]}"
 # 2. System dependencies
 # ---------------------------------------------------------------------------
 echo "--- Installing system dependencies ---"
-sudo apt-get update
-sudo apt-get install -y \
+#
+#sudo apt-get update
+#sudo apt-get install -y \
+#    git \
+#    curl \
+#    emacs \
+#    ripgrep \
+#    fd-find \
+#    build-essential \
+#    cmake \
+#    libtool \
+#    libtool-bin \
+#    pkg-config \
+#    libvterm-dev
+
+#Installing for wayland
+sudo pacman -S -y \
     git \
     curl \
-    emacs \
+    emacs-wayland \
     ripgrep \
-    fd-find \
-    build-essential \
+    fd \
+    base-devel \
     cmake \
     libtool \
-    libtool-bin \
     pkg-config \
-    libvterm-dev
+    libvterm \
 
 # Doom expects `fd`, Debian/Ubuntu ships it as `fdfind`
 if ! command -v fd >/dev/null 2>&1 && command -v fdfind >/dev/null 2>&1; then
