@@ -32,7 +32,7 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-(setq doom-theme 'doom-one)
+(setq doom-theme 'doom-laserwave)
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
@@ -75,7 +75,12 @@
 ;; they are implemented.
 
 ;; Always start Emacs fullscreen (applies to new frames too, e.g. emacsclient).
-(add-to-list 'default-frame-alist '(fullscreen . fullboth))
+;; (add-to-list 'default-frame-alist '(fullscreen . maximized))
+
+(defun build-and-deploy ()
+  "Compile and then deploy your project."
+  (interactive)
+  (compile "npm run deploy -- --server mmo"))
 
 ;; Claude Code IDE
 (use-package! claude-code-ide
@@ -83,8 +88,12 @@
   :config
   (claude-code-ide-emacs-tools-setup))
 
+;; NOTE: all "SPC o" bindings must live in ONE map! call. Each separate
+;; `(:prefix ("o" . "open") ...)` block creates a fresh prefix keymap and
+;; rebinds "o" to it wholesale, wiping out entries added by earlier blocks.
 (map! :leader
       (:prefix ("o" . "open")
+       :desc "Build and Deploy" "D" #'build-and-deploy
        :desc "Claude Code IDE" "c" #'claude-code-ide-menu))
 
 (after! claude-code-ide
@@ -94,7 +103,7 @@
   ;; 2. Direct Doom Emacs to treat Claude buffers as a bottom popup
   (set-popup-rule! "^\\*claude-code\\[.*\\]\\*"
     :side 'bottom
-    :size 0.35      ; Height of the window (35% of the screen)
+    :size 0.20      ; Height of the window (35% of the screen)
     :ttl nil        ; Keep the buffer alive when closed
     :quit nil       ; Prevent accidental closing via ESC
     :select t))     ; Move your cursor focus to it automatically upon opening
@@ -103,7 +112,7 @@
 ;; ABI < 15): that revision fails to build/load, so pin v0.23.3 instead.
 (set-tree-sitter! 'rust-mode 'rustic-mode
   `((rust :url "https://github.com/tree-sitter/tree-sitter-rust"
-          :rev "v0.23.3")))
+     :rev "v0.23.3")))
 
 ;; Must be set before `rust-mode' is required, so it can't go in an `after!'
 ;; block: makes rustic-mode derive its font-lock/indentation from rust-ts-mode
@@ -129,3 +138,5 @@
 (after! apheleia
   (setf (alist-get 'rustfmt apheleia-formatters)
         '("rustfmt" "--quiet" "--emit" "stdout" "--edition" "2024")))
+
+(add-hook 'window-setup-hook #'toggle-frame-maximized)

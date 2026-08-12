@@ -81,7 +81,7 @@
        ;;eshell            ; the elisp shell that works everywhere
        ;;shell             ; simple shell REPL for Emacs
        ;;term              ; basic terminal emulator for Emacs
-  vterm
+       vterm
        ;;ghostel           ; the best terminal emulation in Emacs
 
        :checkers
@@ -172,7 +172,7 @@
        ;;rest              ; Emacs as a REST client
        ;;rst               ; ReST in peace
        ;;(ruby +rails)     ; 1.step {|i| p "Ruby is #{i.even? ? 'love' : 'life'}"}
-  (rust +lsp +tree-sitter)
+       (rust +lsp +tree-sitter)
        ;;scad              ; trust the preview, regret the render
        ;;scala             ; java, but good
        ;;(scheme +guile)   ; a fully conniving family of lisps
@@ -200,3 +200,4 @@
        :config
        ;;literate
        (default +bindings +smartparens))
+
