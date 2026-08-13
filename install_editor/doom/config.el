@@ -127,16 +127,19 @@
 ;; Format-on-save (rustfmt) for Rust ONLY — the `(not ...)` form turns the
 ;; disabled-modes list into an allowlist, so other languages (python/json in
 ;; embedded-apps) are never surprise-reformatted on save.
-(setq +format-on-save-disabled-modes
-      '(not rust-mode rust-ts-mode rustic-mode))
+;;(setq +format-on-save-disabled-modes
+;;     '(not rust-mode rust-ts-mode rustic-mode))
 
 ;; Bare rustfmt (what apheleia runs) doesn't read Cargo.toml, so tell it the
 ;; workspace's edition explicitly — otherwise edition-2024 syntax (let-chains)
 ;; fails to parse and format-on-save silently no-ops on those files. The CLI
 ;; --edition flag matches how `cargo fmt` invokes rustfmt, so editor output
 ;; is byte-identical to what CI checks.
-(after! apheleia
-  (setf (alist-get 'rustfmt apheleia-formatters)
-        '("rustfmt" "--quiet" "--emit" "stdout" "--edition" "2024")))
+;;(after! apheleia
+;;  (setf (alist-get 'rustfmt apheleia-formatters)
+;;       '("rustfmt" "--quiet" "--emit" "stdout" "--edition" "2024")))
 
 (add-hook 'window-setup-hook #'toggle-frame-maximized)
+
+(add-hook! 'rustic-mode-hook
+  (setq-local rustic-format-trigger 'on-save))
