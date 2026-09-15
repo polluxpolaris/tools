@@ -140,6 +140,23 @@
 ;;       '("rustfmt" "--quiet" "--emit" "stdout" "--edition" "2024")))
 
 (add-hook 'window-setup-hook #'toggle-frame-maximized)
+ 
+;; vterm: a WM frame resize (maximize/tile) can land without the terminal's
+;; pty being re-synced, so a fullscreen TUI (Claude Code) draws for the old
+;; row count and leaves dead space until another resize event fires. Force
+;; Emacs to re-run process-window sizing on every frame size change, and
+;; size the pty to the largest window showing the buffer.
+(setq window-adjust-process-window-size-function
+      #'window-adjust-process-window-size-largest)
+(after! vterm
+  (setq vterm-timer-delay 0.01))
+;; claude-code-ide's reflow workaround (for an old Claude Code scroll bug,
+;; fixed by the fullscreen renderer in recent CLI versions) blocks resize
+;; propagation to the Claude process, leaving dead space below the TUI
+;; until a second resize event arrives. Disable it.
+(setq claude-code-ide-prevent-reflow-glitch nil)
+(add-hook 'window-size-change-functions
+          (lambda (_frame) (window--adjust-process-windows)))
 
 (add-hook! 'rustic-mode-hook
   (setq-local rustic-format-trigger 'on-save))
