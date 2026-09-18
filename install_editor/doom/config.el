@@ -78,9 +78,9 @@
 ;; (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
 (defun build-and-deploy ()
-  "Compile and then deploy your project."
+  "Compile and then deploy your project to both mmo and season."
   (interactive)
-  (compile "npm run deploy -- --server mmo"))
+  (compile "npm run deploy -- --server mmo && npm run deploy -- --server season"))
 
 ;; Claude Code IDE
 (use-package! claude-code-ide
